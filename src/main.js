@@ -11,7 +11,7 @@
         FAKE : true
     };
 
-    testObject.some = c.curry( function(a, b, c ){
+    testObject.some = c.curry.call(testObject, function(a, b, c ){
         return this.p + a + b + c;
     });
 
@@ -20,4 +20,6 @@
 
     console.log( result );
 
+    var cMultyBy2 = curry( tf.multy , { lengthBased : false } )(2);
+    console.log( cMultyBy2( 5 )( 2 )(  ) );
 })();

@@ -51,19 +51,35 @@
             assert.equal(4, _multy( 2 )( 2, 1 )());
         });
 
-        // TODO: check working with valueOf
-        // TODO: check with `this`
+        it('`this` passing through', function(){
+            var entity = {
+                value : 2,
+                method : function(a, b, c){
+                    return this.value + a + b + c;
+                }
+            };
+            var _addWithThisInitial = curry.call(entity, entity.method);
+            assert.equal(8, _addWithThisInitial(1, 2)(3) );
+        });
 
-        // it('`this` passing through', function(){
-        //     var testObject = { p : 4 };
-        //     testObject.some = curry( function(a, b, c ){
-        //         return this.p + a + b + c;
-        //     });
+        // TODO: check working with valueOf && with `this`
+        it('`valueOf` using', function(){
+            var _multy = curry( multy, { lengthBased : false });
+            assert.equal(6, _multy( 2 )( 2 ) + 2);
+        });
 
-        //     assert.equal(10, testObject.some(1, 2)(3) );
-            
-        // });
-
+        it('`valueOf` with `this`', function(){
+            var entity = {
+                value : 2.5,
+                method : function(){
+                    return Array.prototype.reduce.call(arguments, function(a, b){
+                        return a + b;
+                    }, this.value);
+                }
+            };
+            var _addWithThisInitial = curry.call(entity, entity.method, { lengthBased : false });
+            assert.equal(42, _addWithThisInitial( 21 )( 20, -3 ) + 1.5);
+        });
 
     });
 

@@ -50,10 +50,16 @@
                     }
                 }
 
-                curred.valueOf = function(){ curred.call(this); };
+                var bindedCurred = curred.bind(this),
+                    self = this;
 
-                return curred;
-            })();
+                bindedCurred.valueOf = function(){
+                    var res = curred.call(self);
+                    return res;
+                };
+
+                return bindedCurred;
+            }).call(this);
 
 
         }

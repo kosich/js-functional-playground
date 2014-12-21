@@ -5,11 +5,15 @@ tests with functional paradigm aspects of ES
 ## Currying
 
 ### Simple currying
+
+This implementation of currying is pretty simple and will evaluate
+passed function as soon as enough arguments passed (equal to <yourFunction>.length)
+
 ```javascript
     var curry = require('/src/currying/simple-curry.js').curry;
-    
+
     // ...
-    
+
     function add(a, b, c){
         return a + b + c;
     }
@@ -21,6 +25,11 @@ tests with functional paradigm aspects of ES
 ```
 
 ### Advanced currying
+
+Advanced currying function provides additional option to accept
+functions with no predefined number of arguments. So it wont be
+called once passed enough arguments
+
 ```javascript
     var curry = require('/src/currying/curry.js').curry;
     
@@ -34,10 +43,28 @@ tests with functional paradigm aspects of ES
     }
 
     // curry fn, and set options : ignore the fn.length
-    var cMulty = curry( multy , { lengthBased : false } );
+    var cMultyBy2 = curry( multy , { lengthBased : false } )(2);
     // ... ergo evaluate only after call with empty args
-    console.log( cMulty( 0.5 )( 12 )( 6, 0.25 )() ); // = 8
+    console.log( cMultyBy2( 5 )( 2 )(  ) ); // = 20
 ```
+
+Also theres an option to deal with `this` in function body.
+For this to happen one should call currying like follows:
+
+```javascript
+var entity = {
+    value : 2,
+    method : function(a, b, c){
+        return this.value + a + b + c;
+    }
+};
+var _addWithThis = curry.call(entity, entity.method);
+assert.equal(8, _addWithThis(1, 2)(3) );
+```
+
+Also supports `valueOf` (even with `this`).
+
+More to see in `/test/currying/curry-test.js`
 
 ## Memoization
 
